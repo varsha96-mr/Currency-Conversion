@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Currency Converter</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+    }
+    
+    .container {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      height: 100vh;
+      background-color: #090908;
+    }
+
+    .converter {
+      text-align: center;
+      margin-top: 20px;
+      padding: 20px;
+      background-color: rgb(247, 242, 242);
+      border-radius: 10px;
+      box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+    }
+
+    .interchange-button {
+      padding: 5px;
+      background-color: rgb(245, 245, 240);
+    }
+
+    .powered-by {
+      position: absolute;
+      bottom: 10px;
+      right: 10px;
+      margin-top: 10px;
+      color: #e8e8ee;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="converter">
+      <h1>Currency Converter</h1>
+      
+      <!-- Labels for input fields and button -->
+      <label for="amount">Amount:</label>
+      <input type="number" id="amount" placeholder="Enter amount"><br>
+      <span id="error" style="color: red;"></span><br>
+      
+      <label for="fromCurrency">From:</label>
+      <select id="fromCurrency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+        <option value="JPY">JPY</option>
+        <option value="CAD">CAD</option>
+      </select>
+      
+      <!-- Interchange button with single arrow symbol -->
+      <button id="interchange" onclick="interchangeCurrencies()" class="interchange-button">&#8644;</button>
+      
+      <label for="toCurrency">To:</label>
+      <select id="toCurrency">
+        <option value="USD">USD</option>
+        <option value="EUR">EUR</option>
+        <option value="GBP">GBP</option>
+        <option value="JPY">JPY</option>
+        <option value="CAD">CAD</option>
+      </select><br><br>
+
+      <!-- Convert and Clear buttons with labels -->
+      <button id="convert" onclick="validateCurrencies()">Convert</button>
+      <button id="clear" onclick="clearFields()">Clear</button><br><br>
+      <span id="conversionError" style="color: red;"></span> <!-- Error message element -->
+
+      <div id="result"></div>
+      <!-- Powered by company image -->
+      <div class="powered-by">
+        <span>Powered by</span><br>
+        <img src="C:\Users\VARSHA MR\OneDrive\Desktop\Da-Local\currency-conversion\1.jpg" alt="Powered by Company">
+      
+    </div>
+  </div>
+
+  <script>
+    function interchangeCurrencies() {
+      const fromCurrency = document.getElementById('fromCurrency').value;
+      const toCurrency = document.getElementById('toCurrency').value;
+      
+      // Swap the selected currencies
+      document.getElementById('fromCurrency').value = toCurrency;
+      document.getElementById('toCurrency').value = fromCurrency;
+    }
+
+    function validateCurrencies() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        document.getElementById('error').innerText = "Please enter a valid amount.";
+        return;
+      }
+      document.getElementById('error').innerText = "";
+      
+      const fromCurrency = document.getElementById('fromCurrency').value;
+      const toCurrency = document.getElementById('toCurrency').value;
+      const conversionErrorElement = document.getElementById('conversionError');
+      
+      if (fromCurrency === toCurrency) {
+        conversionErrorElement.innerText = "Invalid. Please select different currency names.";
+        return;
+      }
+      
+      // If currencies are different, clear any previous error message and proceed with the conversion
+      conversionErrorElement.innerText = "";
+      convertCurrency();
+    }
+
+    function convertCurrency() {
+      const amount = parseFloat(document.getElementById('amount').value);
+      if (isNaN(amount) || amount <= 0) {
+        document.getElementById('error').innerText = "Please enter a valid amount.";
+        return;
+      }
+      
+      const fromCurrency = document.getElementById('fromCurrency').value;
+      const toCurrency = document.getElementById('toCurrency').value;
+      
+      const exchangeRates = {
+        'USD': {
+        'USD': 1,
+        'EUR': 0.93,
+        'GBP': 0.801,
+        'JPY': 154.38,
+        'CAD': 1.37
+   
+        },
+        'EUR': {
+        'USD': 1.06,
+        'EUR': 1,
+        'GBP': 0.85,
+        'JPY': 164.85,
+        'CAD': 1.46
+ 
+        },
+        'GBP': {
+        'USD': 1.24,
+        'EUR': 1.16,
+        'GBP': 1,
+        'JPY': 192.56,
+        'CAD': 1.71
+ 
+        },
+        'JPY': {
+        'USD': 0.0064,
+        'EUR': 0.0060,
+        'GBP': 0.0051,
+        'JPY': 1,
+        'CAD': 0.0089
+   
+        },
+        'CAD': {
+        'USD': 0.72,
+        'EUR': 0.68,
+        'GBP': 0.58,
+        'JPY': 112,
+        'CAD': 1
+    
+        }
+     };
+
+     const conversionRate = exchangeRates[fromCurrency][toCurrency];
+      const convertedAmount = amount * conversionRate;
+
+      document.getElementById('result').innerText = `${amount} ${fromCurrency} = ${convertedAmount.toFixed(2)} ${toCurrency}`;
+    }
+
+    function clearFields() {
+      // Clear input fields, error messages, and result
+      document.getElementById('amount').value = "";
+      document.getElementById('fromCurrency').value = "USD";
+      document.getElementById('toCurrency').value = "EUR";
+      document.getElementById('error').innerText = "";
+      document.getElementById('conversionError').innerText = "";
+      document.getElementById('result').innerText = "";
+    }
+  </script>
+</body>
+</html>
